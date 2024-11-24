@@ -15,8 +15,7 @@ import MenuItem from '@mui/material/MenuItem';
 
 const pages = [
     { name: 'Registro', href: '/Register' },
-    { name: 'Rechazar prestamo', href:'/Delete' },
-    { name: 'Editar datos de prestamo', href: '/Edit' }
+    { name: 'Prestamos', href: '/Edit' }
 ];
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 

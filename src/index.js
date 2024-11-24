@@ -6,8 +6,7 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import Register from './components/register/Register';
-import Delete from './components/delete/Delete';
-import Edit from './components/edit/Edit';
+import List from './components/list/List';
 
 const router = createBrowserRouter([
   {
@@ -19,12 +18,8 @@ const router = createBrowserRouter([
     element: <Register />,
   },
   {
-    path: "/delete",
-    element: <Delete />,
-  },
-  {
     path: "/edit",
-    element: <Edit />,
+    element: <List />,
   },
 ]);
 

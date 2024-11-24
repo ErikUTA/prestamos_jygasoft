@@ -1,6 +1,7 @@
-import * as React from 'react';
+import React, { useEffect, useState } from 'react';
 import { DataGrid } from '@mui/x-data-grid';
 import Paper from '@mui/material/Paper';
+import { listLoans } from '../LoanHelper';
 
 const columns = [
   { field: 'id', headerName: 'ID', width: 70 },
@@ -37,6 +38,12 @@ const rows = [
 const paginationModel = { page: 0, pageSize: 5 };
 
 export default function Edit() {
+  const [loans, setLoans] = useState([]);
+  useEffect(() => {
+    setLoans(listLoans);
+    console.log(loans);
+  }, [loans]);
+
   return (
     <Paper sx={{ height: 400, width: '100%' }}>
       <DataGrid
