@@ -88,7 +88,7 @@ function Root() {
               Solicitud
             </Button>
             <Button
-              href={"/Loans"}
+              href={"/list"}
               key="Prestamos"
               sx={{ my: 2, color: "white", display: "block" }}
             >

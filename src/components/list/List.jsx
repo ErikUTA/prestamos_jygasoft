@@ -11,7 +11,6 @@ import TableRow from "@mui/material/TableRow";
 import Typography from "@mui/material/Typography";
 import Paper from "@mui/material/Paper";
 import axios from "axios";
-import Modal from "@mui/material/Modal";
 import Swal from "sweetalert2";
 import { TextField } from "@mui/material";
 import { addMonth } from "../LoanHelper";
@@ -21,19 +20,7 @@ export default function List() {
   const [loans, setLoans] = useState([]);
   const [newRows, setNewRows] = useState([]);
   const [oldRows, setOldRows] = useState([]);
-  const [edit, setEdit] = useState(false);
   const [input, setInput] = useState("");
-  const style = {
-    position: "absolute",
-    top: "50%",
-    left: "50%",
-    transform: "translate(-50%, -50%)",
-    width: 400,
-    bgcolor: "background.paper",
-    border: "2px solid #000",
-    boxShadow: 24,
-    p: 4,
-  };
 
   const editModal = (id) => {
     const loan = loans.filter((row) => row.id === id);
@@ -99,7 +86,7 @@ export default function List() {
 
   useEffect(() => {
     axios
-      .get(process.env.REACT_APP_API_URL_PROD + "/list")
+      .get(process.env.REACT_APP_API_URL_PROD + "/listLoans")
       .then((response) => {
         if (response.data.length > 0) {
           setLoans(response.data);
@@ -334,24 +321,6 @@ export default function List() {
           </TableBody>
         </Table>
       </TableContainer>
-      {/* Edit Modal */}
-      <div>
-        <Modal
-          open={edit}
-          onClose={() => setEdit(false)}
-          aria-labelledby="modal-modal-title"
-          aria-describedby="modal-modal-description"
-        >
-          <Box sx={style}>
-            <Typography id="modal-modal-title" variant="h6" component="h2">
-              Text in a modal
-            </Typography>
-            <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-              Duis mollis, est non commodo luctus, nisi erat porttitor ligula.
-            </Typography>
-          </Box>
-        </Modal>
-      </div>
     </>
   );
 }
