@@ -55,7 +55,7 @@ export default function Register() {
     const formValidated = validateForm(form);
     if (formValidated === "") {
       axios
-        .put(process.env.REACT_APP_API_URL + "/updateLoan/" + id, form)
+        .put(process.env.REACT_APP_API_URL_PROD + "/updateLoan/" + id, form)
         .then((res) => {
           Swal.fire({
             icon: "success",
@@ -115,7 +115,7 @@ export default function Register() {
     const formValidated = validateForm(form);
     if (formValidated === "") {
       axios
-        .post(process.env.REACT_APP_API_URL + "/insertLoan", form)
+        .post(process.env.REACT_APP_API_URL_PROD + "/insertLoan", form)
         .then((res) => {
           Swal.fire({
             icon: "success",
