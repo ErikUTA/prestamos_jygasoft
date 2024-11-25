@@ -62,7 +62,7 @@ export default function List() {
       .then((result) => {
         if (result.isConfirmed) {
           axios
-            .delete(REACT_APP_API_URL_PROD + "/deleteLoan/" + id)
+            .delete(process.env.REACT_APP_API_URL_PROD + "/deleteLoan/" + id)
             .then((res) => {
               swalWithBootstrapButtons.fire({
                 title: "¡Se ha eliminado el prestamo correctamente!",
