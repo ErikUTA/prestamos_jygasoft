@@ -1,26 +1,5 @@
-import axios from "axios";
-
-export const listLoans = () => {
-  axios.get(process.env.REACT_APP_API_URL + "/listLoans").then((response) => {
-    return response;
-  });
-};
-
-export const createLoan = (form) => {
-  const formValidated = validateForm(form);
-  // if (formValidated.status == "success") {
-  //   axios
-  //     .post(process.env.REACT_APP_API_URL + "/insertLoan", form)
-  //     .then((response) => {
-  //       return response;
-  //     });
-  // } else {
-  return formValidated;
-  // }
-};
-
 export const convertDateTime = (input) => {
-  if (input.$d != "Invalid Date") {
+  if (!isNaN(input)) {
     const newDateTime = `${new Date(input)
       .toISOString()
       .slice(
@@ -34,7 +13,7 @@ export const convertDateTime = (input) => {
   }
 };
 
-const validateForm = (form) => {
+export const validateForm = (form) => {
   const messages = [];
 
   form.CI === "" || form.CI.length > 11
@@ -118,16 +97,16 @@ const validateForm = (form) => {
       })
     : messages.push({ status: "success" });
   
-  const result = orderMessages(messages);
-
-  return messages;
+  const newMessage = orderMessages(messages);
+  return newMessage;
 };
 
 const orderMessages = (messages) => {
-  const text = messages.filter((e) =>  {
-    if(e.stastus === 'error') {
-      
+  let li = '';
+  for(const m of messages) {
+    if(m.status === 'error') {
+      li += `° ${m.message} \n`; 
     }
-  });
-  console.log(text);
+  }
+  return li;
 }

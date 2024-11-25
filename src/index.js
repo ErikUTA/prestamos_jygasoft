@@ -18,17 +18,17 @@ const router = createBrowserRouter([
     element: <Register />,
   },
   {
-    path: "/edit",
+    path: "/Loans",
     element: <List />,
   },
 ]);
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-  <React.StrictMode>
+  <>
     <Root />
     <RouterProvider router={router} />
-  </React.StrictMode>
+  </>
 );
 
 reportWebVitals();

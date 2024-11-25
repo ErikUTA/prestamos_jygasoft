@@ -7,11 +7,12 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import Button from "@mui/material/Button";
 import Grid from "@mui/material/Grid2";
-import Swal from 'sweetalert2';
-import { convertDateTime, createLoan } from "../LoanHelper";
+import Swal from "sweetalert2";
+import { convertDateTime, validateForm } from "../LoanHelper";
+import axios from "axios";
 
 export default function Register() {
-  const [flag, setFlag] = useState(false);
+  const [flag, setFlag] = useState(true);
   const [form, setForm] = useState({
     CI: "",
     Nombre: "",
@@ -27,22 +28,78 @@ export default function Register() {
   });
 
   const submit = () => {
-    const message = createLoan(form);
-    // console.log(message);
-    Swal.fire({
-      title: '',
-      width: 600,
-      padding: "3em",
-      color: "#716add",
-      background: "#fff",
-      backdrop: `
-        rgba(0,0,123,0.4)
-        left top
-        no-repeat
-      `
+    const formValidated = validateForm(form);
+    if (formValidated === "") {
+      axios
+        .post(process.env.REACT_APP_API_URL + "/insertLoan", form)
+        .then((res) => {
+          Swal.fire({
+            title: "¡Se ha enviado su solicitud correctamente!",
+            width: 600,
+            padding: "3em",
+            fontSize: "small",
+            color: "#716add",
+            background: "#fff",
+            backdrop: `
+                rgba(0,0,123,0.4)
+                left top
+                no-repeat
+              `,
+          });
+          setFlag(true);
+          clear();
+        })
+        .catch((error) => {
+          Swal.fire({
+            title: error,
+            width: 600,
+            padding: "3em",
+            fontSize: "small",
+            color: "#716add",
+            background: "#fff",
+            backdrop: `
+                rgba(0,0,123,0.4)
+                left top
+                no-repeat
+              `,
+          });
+          setFlag(false);
+        });
+      setFlag(true);
+    } else {
+      Swal.fire({
+        title: formValidated,
+        width: 600,
+        padding: "3em",
+        fontSize: "small",
+        color: "#716add",
+        background: "#fff",
+        backdrop: `
+            rgba(0,0,123,0.4)
+            left top
+            no-repeat
+          `,
+      });
+      setFlag(false);
+    }
+  };
+
+  const clear = () => {
+    setForm({
+      ...form,
+      CI: "",
+      Nombre: "",
+      Apellido_p: "",
+      Apellido_m: "",
+      Cantidad: "",
+      Telefono: "",
+      Email: "",
+      Fecha: "",
+      Dia_cobro: "",
+      Meses_p: "",
+      Interes: "",
     });
-    setFlag(!flag);
-  }
+  };
 
   return (
     <Box
@@ -60,6 +117,7 @@ export default function Register() {
             <Grid className="container" size={{ xs: 12, sm: 6, md: 4 }}>
               <TextField
                 required
+                value={form.CI}
                 onChange={(e) => setForm({ ...form, CI: e.target.value })}
                 sx={{ width: "90ch" }}
                 id="CI"
@@ -70,6 +128,7 @@ export default function Register() {
             </Grid>
             <Grid className="container" size={{ xs: 12, sm: 6, md: 4 }}>
               <TextField
+                value={form.Nombre}
                 onChange={(e) => setForm({ ...form, Nombre: e.target.value })}
                 id="Nombre"
                 label="Nombre"
@@ -79,6 +138,7 @@ export default function Register() {
             </Grid>
             <Grid className="container" size={{ xs: 12, sm: 6, md: 4 }}>
               <TextField
+                value={form.Apellido_p}
                 onChange={(e) =>
                   setForm({ ...form, Apellido_p: e.target.value })
                 }
@@ -92,6 +152,7 @@ export default function Register() {
           <Grid container spacing={2}>
             <Grid className="container" size={{ xs: 12, sm: 6, md: 4 }}>
               <TextField
+                value={form.Apellido_m}
                 onChange={(e) =>
                   setForm({ ...form, Apellido_m: e.target.value })
                 }
@@ -103,9 +164,8 @@ export default function Register() {
             </Grid>
             <Grid className="container" size={{ xs: 12, sm: 6, md: 4 }}>
               <TextField
-                onChange={(e) =>
-                  setForm({ ...form, Cantidad: e.target.value })
-                }
+                value={form.Cantidad}
+                onChange={(e) => setForm({ ...form, Cantidad: e.target.value })}
                 id="Cantidad Prestada"
                 label="Cantidad Prestada"
                 type="number"
@@ -115,6 +175,7 @@ export default function Register() {
             </Grid>
             <Grid className="container" size={{ xs: 12, sm: 6, md: 4 }}>
               <TextField
+                value={form.Telefono}
                 onChange={(e) => setForm({ ...form, Telefono: e.target.value })}
                 id="Teléfono"
                 label="Teléfono"
@@ -127,6 +188,7 @@ export default function Register() {
           <Grid container spacing={2}>
             <Grid className="container" size={{ xs: 12, sm: 6, md: 4 }}>
               <TextField
+                value={form.Email}
                 onChange={(e) => setForm({ ...form, Email: e.target.value })}
                 id="Email"
                 label="Email"
@@ -155,7 +217,10 @@ export default function Register() {
           <Grid container spacing={2}>
             <Grid className="container" size={{ xs: 12, sm: 6, md: 4 }}>
               <TextField
-                onChange={(e) => setForm({ ...form, Dia_cobro: e.target.value })}
+                value={form.Dia_cobro}
+                onChange={(e) =>
+                  setForm({ ...form, Dia_cobro: e.target.value })
+                }
                 id="Día de cobro"
                 label="Día de cobro"
                 type="number"
@@ -164,9 +229,8 @@ export default function Register() {
             </Grid>
             <Grid className="container" size={{ xs: 12, sm: 6, md: 4 }}>
               <TextField
-                onChange={(e) =>
-                  setForm({ ...form, Meses_p: e.target.value })
-                }
+                value={form.Meses_p}
+                onChange={(e) => setForm({ ...form, Meses_p: e.target.value })}
                 id="Meses del Prestamo"
                 label="Meses del Prestamo"
                 type="number"
@@ -175,6 +239,7 @@ export default function Register() {
             </Grid>
             <Grid className="container" size={{ xs: 12, sm: 6, md: 4 }}>
               <TextField
+                value={form.Interes}
                 onChange={(e) => setForm({ ...form, Interes: e.target.value })}
                 id="Intereses"
                 label="Intereses"
@@ -185,7 +250,11 @@ export default function Register() {
           </Grid>
         </div>
         <div className="button-container">
-          <Button onClick={submit} variant="contained" color={flag ? "success":"error"}>
+          <Button
+            onClick={submit}
+            variant="outlined"
+            color={flag ? "success" : "error"}
+          >
             Enviar
           </Button>
         </div>
