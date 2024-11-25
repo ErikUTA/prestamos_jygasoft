@@ -99,7 +99,7 @@ export default function List() {
 
   useEffect(() => {
     axios
-      .get(process.env.REACT_APP_API_URL_PROD + "/listLoans")
+      .get(process.env.REACT_APP_API_URL_PROD + "/list")
       .then((response) => {
         if (response.data.length > 0) {
           setLoans(response.data);

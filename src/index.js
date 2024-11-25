@@ -18,7 +18,7 @@ const router = createBrowserRouter([
     element: <Register />,
   },
   {
-    path: "/Loans",
+    path: "/list",
     element: <List />,
   },
 ]);
