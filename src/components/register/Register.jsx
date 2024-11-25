@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
@@ -27,14 +27,39 @@ export default function Register() {
     Interes: "",
   });
 
-  const submit = () => {
+  useEffect(() => {
+    const item = localStorage.getItem("loan");
+    if (item) {
+      const loan = JSON.parse(item);
+      localStorage.setItem("id", loan[0].id);
+      setForm({
+        ...form,
+        CI: loan[0].CI,
+        Nombre: loan[0].Nombre,
+        Apellido_p: loan[0].Apellido_p,
+        Apellido_m: loan[0].Apellido_m,
+        Cantidad: loan[0].Cantidad,
+        Telefono: loan[0].Telefono,
+        Email: loan[0].Email,
+        Fecha: convertDateTime(loan[0].Fecha),
+        Dia_cobro: loan[0].Dia_cobro,
+        Meses_p: loan[0].Meses_p,
+        Interes: loan[0].Interes,
+      });
+      console.log(loan[0]);
+    }
+  }, []);
+
+  const edit = () => {
+    const id = localStorage.getItem("id");
     const formValidated = validateForm(form);
     if (formValidated === "") {
       axios
-        .post(process.env.REACT_APP_API_URL + "/insertLoan", form)
+        .put(process.env.REACT_APP_API_URL + "/updateLoan/" + id, form)
         .then((res) => {
           Swal.fire({
-            title: "¡Se ha enviado su solicitud correctamente!",
+            icon: "success",
+            title: "¡Se ha editado su solicitud correctamente!",
             width: 600,
             padding: "3em",
             fontSize: "small",
@@ -52,6 +77,7 @@ export default function Register() {
         .catch((error) => {
           Swal.fire({
             title: error,
+            icon: "error",
             width: 600,
             padding: "3em",
             fontSize: "small",
@@ -70,6 +96,67 @@ export default function Register() {
       Swal.fire({
         title: formValidated,
         width: 600,
+        icon: "error",
+        padding: "3em",
+        fontSize: "small",
+        color: "#716add",
+        background: "#fff",
+        backdrop: `
+            rgba(0,0,123,0.4)
+            left top
+            no-repeat
+          `,
+      });
+      setFlag(false);
+    }
+  };
+
+  const submit = () => {
+    const formValidated = validateForm(form);
+    if (formValidated === "") {
+      axios
+        .post(process.env.REACT_APP_API_URL + "/insertLoan", form)
+        .then((res) => {
+          Swal.fire({
+            icon: "success",
+            title: "¡Se ha enviado su solicitud correctamente!",
+            width: 600,
+            padding: "3em",
+            fontSize: "small",
+            color: "#716add",
+            background: "#fff",
+            backdrop: `
+                rgba(0,0,123,0.4)
+                left top
+                no-repeat
+              `,
+          });
+          setFlag(true);
+          clear();
+        })
+        .catch((error) => {
+          Swal.fire({
+            title: error,
+            icon: "error",
+            width: 600,
+            padding: "3em",
+            fontSize: "small",
+            color: "#716add",
+            background: "#fff",
+            backdrop: `
+                rgba(0,0,123,0.4)
+                left top
+                no-repeat
+              `,
+          });
+          setFlag(false);
+        });
+      setFlag(true);
+    } else {
+      Swal.fire({
+        title: formValidated,
+        width: 600,
+        icon: "error",
         padding: "3em",
         fontSize: "small",
         color: "#716add",
@@ -110,7 +197,11 @@ export default function Register() {
     >
       <div className="card">
         <div className="title">
-          <h1>Solicitar un prestamo</h1>
+          <h1>
+            {localStorage.getItem("loan")
+              ? "Editar registro"
+              : "Solicitar un prestamo"}
+          </h1>
         </div>
         <div>
           <Grid container spacing={2}>
@@ -188,35 +279,6 @@ export default function Register() {
           <Grid container spacing={2}>
             <Grid className="container" size={{ xs: 12, sm: 6, md: 4 }}>
               <TextField
-                value={form.Email}
-                onChange={(e) => setForm({ ...form, Email: e.target.value })}
-                id="Email"
-                label="Email"
-                type="email"
-                multiline
-                maxRows={200}
-              />
-            </Grid>
-            <Grid className="container" size={{ xs: 12, sm: 6, md: 4 }}>
-              <LocalizationProvider dateAdapter={AdapterDayjs}>
-                <DemoContainer components={["DatePicker"]}>
-                  <DatePicker
-                    className="datePicker"
-                    label="Fecha de Préstamo"
-                    onChange={(e) =>
-                      setForm({
-                        ...form,
-                        Fecha: convertDateTime(e),
-                      })
-                    }
-                  />
-                </DemoContainer>
-              </LocalizationProvider>
-            </Grid>
-          </Grid>
-          <Grid container spacing={2}>
-            <Grid className="container" size={{ xs: 12, sm: 6, md: 4 }}>
-              <TextField
                 value={form.Dia_cobro}
                 onChange={(e) =>
                   setForm({ ...form, Dia_cobro: e.target.value })
@@ -248,15 +310,58 @@ export default function Register() {
               />
             </Grid>
           </Grid>
+          <Grid container spacing={2}>
+            <Grid className="container" size={{ xs: 12, sm: 6, md: 4 }}>
+              <TextField
+                value={form.Email}
+                onChange={(e) => setForm({ ...form, Email: e.target.value })}
+                id="Email"
+                label="Email"
+                type="email"
+                multiline
+                maxRows={200}
+              />
+            </Grid>
+            {localStorage.getItem("loan") ? (
+              <></>
+            ) : (
+              <Grid className="container" size={{ xs: 12, sm: 6, md: 4 }}>
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                  <DemoContainer components={["DatePicker"]}>
+                    <DatePicker
+                      className="datePicker"
+                      label="Fecha de Préstamo"
+                      onChange={(e) =>
+                        setForm({
+                          ...form,
+                          Fecha: convertDateTime(e),
+                        })
+                      }
+                    />
+                  </DemoContainer>
+                </LocalizationProvider>
+              </Grid>
+            )}
+          </Grid>
         </div>
         <div className="button-container">
-          <Button
-            onClick={submit}
-            variant="outlined"
-            color={flag ? "success" : "error"}
-          >
-            Enviar
-          </Button>
+          {localStorage.getItem("loan") ? (
+            <Button
+              onClick={edit}
+              variant="outlined"
+              color={flag ? "success" : "error"}
+            >
+              Editar
+            </Button>
+          ) : (
+            <Button
+              onClick={submit}
+              variant="outlined"
+              color={flag ? "success" : "error"}
+            >
+              Enviar
+            </Button>
+          )}
         </div>
       </div>
     </Box>

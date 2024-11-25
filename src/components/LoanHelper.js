@@ -13,6 +13,22 @@ export const convertDateTime = (input) => {
   }
 };
 
+export const addMonth = (index, loanDate) => {
+  const date = new Date(loanDate);
+  const month = date.getMonth();
+  const dateWithDifferentmonth = date.setMonth(month + index);
+  const dateValidated = `${new Date(dateWithDifferentmonth)
+    .toISOString()
+    .slice(
+      0,
+      10
+    )} ${new Date().getHours()}:${new Date().getMinutes()}:${new Date()
+    .getMilliseconds()
+    .toString()
+    .slice(0, 2)}`;
+  return dateValidated;
+};
+
 export const validateForm = (form) => {
   const messages = [];
 
@@ -96,17 +112,17 @@ export const validateForm = (form) => {
         status: "error",
       })
     : messages.push({ status: "success" });
-  
+
   const newMessage = orderMessages(messages);
   return newMessage;
 };
 
 const orderMessages = (messages) => {
-  let li = '';
-  for(const m of messages) {
-    if(m.status === 'error') {
-      li += `° ${m.message} \n`; 
+  let li = "";
+  for (const m of messages) {
+    if (m.status === "error") {
+      li += `° ${m.message} \n`;
     }
   }
   return li;
-}
+};

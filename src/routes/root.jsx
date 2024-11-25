@@ -6,12 +6,11 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import Button from "@mui/material/Button";
 
-const pages = [
-  { name: "Registro", href: "/Register" },
-  { name: "Prestamos", href: "/Loans" },
-];
-
 function Root() {
+  const clearLocalStorage = () => {
+    localStorage.clear();
+    window.location.href = "/Register";
+  };
 
   return (
     <AppBar position="static">
@@ -33,18 +32,28 @@ function Root() {
               backgroundColor: "transparent",
             }}
           >
-            <img width="80px" height="80px" src="/assets/money_1.svg" />
+            <img
+              width="80px"
+              height="80px"
+              src="/assets/money_1.svg"
+              alt="none"
+            />
           </Typography>
           <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
-            {pages.map((page) => (
-              <Button
-                href={page.href}
-                key={page.name}
-                sx={{ my: 2, color: "white", display: "block" }}
-              >
-                {page.name}
-              </Button>
-            ))}
+            <Button
+              onClick={clearLocalStorage}
+              key="Solicitud"
+              sx={{ my: 2, color: "white", display: "block" }}
+            >
+              Solicitud
+            </Button>
+            <Button
+              href={"/Loans"}
+              key="Prestamos"
+              sx={{ my: 2, color: "white", display: "block" }}
+            >
+              Prestamos
+            </Button>
           </Box>
 
           <Typography
@@ -63,18 +72,28 @@ function Root() {
               textDecoration: "none",
             }}
           >
-            <img width="80px" height="80px" src="/assets/money_1.svg" />
+            <img
+              width="80px"
+              height="80px"
+              src="/assets/money_1.svg"
+              alt="none"
+            />
           </Typography>
           <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
-            {pages.map((page) => (
-              <Button
-                href={page.href}
-                key={page.name}
-                sx={{ my: 2, color: "white", display: "block" }}
-              >
-                {page.name}
-              </Button>
-            ))}
+            <Button
+              onClick={clearLocalStorage}
+              key="Solicitud"
+              sx={{ my: 2, color: "white", display: "block" }}
+            >
+              Solicitud
+            </Button>
+            <Button
+              href={"/Loans"}
+              key="Prestamos"
+              sx={{ my: 2, color: "white", display: "block" }}
+            >
+              Prestamos
+            </Button>
           </Box>
         </Toolbar>
       </Container>
