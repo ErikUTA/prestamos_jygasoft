@@ -26,7 +26,7 @@ export const addMonth = (index, loanDate) => {
     .getMilliseconds()
     .toString()
     .slice(0, 2)}`;
-  return dateValidated;
+  return dateValidated.slice(0, 10);
 };
 
 export const validateForm = (form) => {
