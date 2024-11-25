@@ -38,7 +38,7 @@ export default function List() {
   const editModal = (id) => {
     const loan = loans.filter((row) => row.id === id);
     localStorage.setItem("loan", JSON.stringify(loan));
-    window.location.href = "/Register";
+    window.location.href = "/register";
   };
 
   const deleteRow = (id) => {

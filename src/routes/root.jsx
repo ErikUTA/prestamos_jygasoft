@@ -9,7 +9,7 @@ import Button from "@mui/material/Button";
 function Root() {
   const clearLocalStorage = () => {
     localStorage.clear();
-    window.location.href = "/Register";
+    window.location.href = "/register";
   };
 
   return (
